@@ -1,38 +1,340 @@
-.App {
-  text-align: center;
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
+
+* {
+    border: 1px black solid;
+    border-width: 0px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+    --main-ui-color: #ededed;
+    --main-ui-color-focus: #e5e5e5;
+    --main-ui-color-select: #5b697f;
+    --secondary-ui-color: #9f9fc5;
+    --main-text-color: #201f31;
+    --secondary-text-color: #090939;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app-box {
+    padding: 2vh 3vw;
+    color: var(--main-text-color);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ui-header {
+    min-height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
-.App-link {
-  color: #61dafb;
+.ui-header-left {
+    display: flex;
+    justify-content: flex-start;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ui-header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sort-by-status-box {
+    display: flex;
+    justify-content: flex-start;
+    align-content: stretch;
+    gap: 10px;
+}
+
+.sort-by-property-box {
+    display: flex;
+    justify-content: flex-start;
+    align-content: stretch;
+    gap: 10px;
+}
+
+.filter-button-inactive {
+    font-size: 14px;
+    padding: 2px 0.5em;
+    margin: 1px;
+    background-color: var(--main-ui-color);
+    border-radius: 5px;
+    border-color: var(--main-ui-color);
+}
+
+.filter-button-inactive:hover {
+    background-color: var(--main-ui-color-focus);
+    border-color: var(--main-ui-color-focus);
+}
+
+.filter-button-active {
+    font-size: 14px;
+    padding: 2px 0.5em;
+    margin: 1px;
+    border-radius: 5px;
+    background-color: var(--main-ui-color-select);
+}
+
+.settings-button {
+    font-size: large;
+    color: var(--secondary-ui-color);
+    margin-left: 2vh;
+}
+
+.settings {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 100vw;
+    background-color: var(--main-text-color);
+    overflow-x: hidden;
+    transition: 0.2s;
+    z-index: 1;
+    padding-top: 4vh;
+}
+
+.settings-close-button {
+    position: absolute;
+    top: 1vh;
+    right: 37vw;
+    font-size: xx-large;
+    color: var(--main-ui-color-select);
+}
+
+.settings-close-button:hover {
+    color: var(--main-ui-color);
+}
+
+.settings-button:hover {
+    color: var(--secondary-text-color);
+}
+
+.add-new-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 0;
+    width: 100%;
+    background-color: var(--main-ui-color);
+    border-radius: 1.2vw;
+    margin: 2vh 0;
+}
+
+.add-new-button-container:hover {
+    background-color: var(--main-ui-color-focus);
+}
+
+.add-new-button {
+    background-color: inherit;
+    font-size: xx-large;
+    padding: 0.4em 0.8em;
+}
+
+.new-torrent-modal-bg {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.new-torrent-modal-box {
+    background-color: var(--main-text-color);
+    margin: 25vh auto;
+    width: 50vw;
+    border-radius: 1vw;
+}
+
+.new-torrent-modal-header {
+    display: flex;
+    justify-content: space-between;
+    color: var(--main-ui-color-focus);
+    align-items: center;
+    font-size: large;
+    padding: 2vh 2vw;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3vh 2vw;
+    gap: 2em;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 2em;
+    color: var(--main-ui-color);
+}
+
+.form-label {
+    width: 30%;
+    align-self: center;
+    margin-right: 2vw;
+}
+
+.form-input {
+    border-radius: 0.8em;
+    width: 70%;
+    padding: 0 1em;
+    color: var(--main-text-color);
+    background-color: var(--main-ui-color-focus);
+    text-align: right;
+    font-size: medium;
+}
+
+.form-input:focus {
+    border-color: var(--main-ui-color-select);
+    border-width: 0.1em;
+}
+
+.form-button {
+    background-color: var(--main-ui-color-focus);
+    padding: 0 0.5em;
+    border-radius: 0.8em;
+    font-size: medium;
+}
+
+.form-button:hover {
+    background-color: var(--main-ui-color-select);
+}
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.new-torrent-close-button {
+    color: var(--main-ui-color-select);
+    font-size: xx-large;
+}
+
+.new-torrent-close-button:hover {
+    color: var(--main-ui-color-focus);
+}
+
+.all-torrents-box {
+    padding-top: 3vh;
+    min-height: 91vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1em;
+}
+
+.torrent-box {
+    display: flex;
+    background-color: var(--main-ui-color);
+    border-radius: 1.2vw;
+    padding: 1vh 2vw 1vh 0;
+}
+
+.torrent-box:hover {
+    background-color: var(--main-ui-color-focus);
+}
+
+.torrent-box-left {
+    display: flex;
+    width: 10%;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.torrent-box-right {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    justify-content: space-between;
+}
+
+.torrent-box-top {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 2vh;
+}
+
+.torrent-box-top-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.torrent-delete-button {
+    position: relative;
+    bottom: 2.7vh;
+    left: 1.7vw;
+    font-size: x-large;
+    color: var(--secondary-ui-color);
+    border-radius: 1ch;
+}
+
+.torrent-delete-button:hover {
+    color: var(--secondary-text-color);
+}
+
+.torrent-box-middle {
+    display: flex;
+    align-items: stretch;
+}
+
+.torrent-box-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.torrent-play-pause-button {
+    background-color: inherit;
+    border-radius: 5vw;
+    color: var(--secondary-text-color);
+    height: 6vw;
+    width: 6vw;
+    margin: 1vh 1vw;
+    font-size: xx-large;
+}
+
+.torrent-play-pause-button:hover {
+    background-color: var(--main-ui-color);
+}
+
+.torrent-name {
+    color: var(--main-text-color);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.torrent-location {
+    color: var(--secondary-text-color);
+    font-size: 12px;
+}
+
+.torrent-progress-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.torrent-progress-percentage {
+    color: var(--main-text-color);
+    width: 5ch;
+}
+
+.torrent-progress-bar {
+    background-color: var(--secondary-text-color);
+    border-radius: 1ch;
+}
+
+.torrent-size {
+    color: var(--secondary-text-color);
+    font-size: 12px;
+}
+
+.torrent-speed {
+    color: var(--secondary-text-color);
+    font-size: 12px;
 }
