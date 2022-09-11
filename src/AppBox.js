@@ -1,6 +1,8 @@
 import React from 'react'
 import UIHeader from './header/UIHeader'
 import AllTorrentsBox from './torrent/AllTorrentsBox';
+import WarningBox from './WarningBox';
+import StatusBox from './StatusBox';
 import axios from 'axios'
 
 // testing request responses
@@ -60,14 +62,20 @@ class AppBox extends React.Component {
         this.changeDefaultDownloadLocation = this.changeDefaultDownloadLocation.bind(this);
         this.toggleTorrent = this.toggleTorrent.bind(this);
         this.getTorrents = this.getTorrents.bind(this);
+        this.refresh = this.refresh.bind(this);
+        this.periodicUpdate = this.periodicUpdate.bind(this);
+        this.periodicHealthCheck = this.periodicHealthCheck.bind(this);
+        this.onApiSuccess = this.onApiSuccess.bind(this);
         this.state = {
             filterKey: 'all',
             sortKey: 'date',
             sortIsAscending: true,
-            allTorrents: torrents,
-            torrentsToShow: torrents,
-            serverAddress: 'http://127.0.0.1:5000/',
-            defaultDownloadLocation: '/opt/transmission/download'
+            allTorrents: [],
+            torrentsToShow: [],
+            serverAddress: 'http://127.0.0.1:3001/',
+            defaultDownloadLocation: '/opt/transmission/download',
+            errorMessage: "",
+            connected: true
         };
     }
 
@@ -142,10 +150,34 @@ class AppBox extends React.Component {
         this.setState(this.sortTorrents);
     }
 
-    checkServer() {
+    refresh() {
+        if (this.state.connected) {
+            this.getTorrents();
+        }
+    }
+
+    periodicUpdate() {
+        if (this.state.connected) {
+            this.getTorrents();
+        }
+    }
+
+    periodicHealthCheck() {
+        console.log('periodic health check: '.concat(this.state.connected.toString()))
+        if (this.state.connected) {
+            return;
+        }
         axios.get('/status')
         .then((response) => {
-            if (response.data.status != "success") this.onApiError(response);
+            if (response.data.status != "success") {
+                console.log(response.data.status)
+            }
+            else {
+                this.onApiSuccess(response);
+                this.setState({connected: true})
+            }
+        }).catch((error) => {
+            this.setState({connected: false})
         })
     }
 
@@ -174,6 +206,7 @@ class AppBox extends React.Component {
         .then((response) => {
             if (response.data.status != "success") this.onApiError(response.data);
             else {
+                this.onApiSuccess(response);
                 let updated_torrent = response.data.data;
                 this.setState(function(state, props) {
                     let allTorrents = state.allTorrents;
@@ -188,23 +221,27 @@ class AppBox extends React.Component {
 
     onApiError(resp) {
         console.log("api error. ".concat(resp.status));
+        let detailed = "";
+
+        switch (resp.status) {
+            case "not connected":
+                detailed = "API cannot connect to torrent server"
+                break;
+            default:
+                detailed = "ERROR: ".concat(resp.status);
+        }
+
+        this.setState({errorMessage: detailed})
+    }
+
+    onApiSuccess(resp) {
+        this.setState({connected: true});
     }
 
     onRequestError(error) {
         console.log("request failed");
+        this.setState({connected: false})
     }
-
-    /*getTorrent(id) {
-        axios.get('/torrents/'.concat(id.toString()))
-        .then((response) => {
-            if (response.data.status != "success") this.onApiError(response.data);
-            else {
-                return response.data.data;
-            }
-        }).catch((error) => {
-            this.onRequestError(error);
-        });
-    }*/
 
     getTorrents() {
         axios.get('/torrents'
@@ -213,6 +250,7 @@ class AppBox extends React.Component {
                 console.log("api error: ".concat(response.data["status"]));
                 this.onApiError(response.data);
             }
+            this.onApiSuccess(response);
             let torrents = response.data.data
             this.setState({allTorrents: torrents});
             this.setState(this.filterTorrents);
@@ -227,8 +265,9 @@ class AppBox extends React.Component {
         axios.defaults.baseURL = this.state.serverAddress;
         axios.defaults.headers.common["access-control-allow-origin"] = this.state.serverAddress;
         
-        setInterval(this.getTorrents, 1000);
-        this.getTorrents();
+        setInterval(this.periodicUpdate, 1000);
+        setInterval(this.periodicHealthCheck, 5000);
+        this.refresh();
     }
 
     render() {
@@ -247,6 +286,10 @@ class AppBox extends React.Component {
                                 toggleTorrent={this.toggleTorrent}
                                 defaultDownloadLocation={this.state.defaultDownloadLocation}
                                 />
+                <WarningBox message={this.state.errorMessage} />
+                <StatusBox connected={this.state.connected}
+                        onRefresh={this.refresh} 
+                        />
             </div>
         )
     }
