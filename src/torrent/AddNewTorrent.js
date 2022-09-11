@@ -15,8 +15,8 @@ import React from 'react'
     render() {
         return (
             <div>
-                <div className='add-new-button-container'>
-                    <button className='add-new-button' onClick={this.openNewTorrentModal}>+</button>
+                <div className='add-new-button-container' onClick={this.openNewTorrentModal}>
+                    <button className='add-new-button'>+</button>
                 </div>
                 <div id='new-torrent-modal' className='new-torrent-modal-bg'>
                     <div className='new-torrent-modal-box'>
