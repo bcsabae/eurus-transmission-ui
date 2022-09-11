@@ -7,7 +7,7 @@ import React from 'react'
  class TorrentProgressBar extends React.Component {
     render() {
         let inlineStyle = {
-            width : (this.props.progress*100).toString().concat("%")
+            width : (this.props.progress).toString().concat("%")
         };
 
         return (
@@ -16,7 +16,7 @@ import React from 'react'
                     {this.props.progress}%
                 </div>
                 <div className='torrent-progress-bar' style={inlineStyle}>
-                    itt
+                    .
                 </div>
             </div>
         )

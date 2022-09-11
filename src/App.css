@@ -321,7 +321,7 @@
 
 .torrent-progress-percentage {
     color: var(--main-text-color);
-    width: 5ch;
+    width: 7ch;
 }
 
 .torrent-progress-bar {

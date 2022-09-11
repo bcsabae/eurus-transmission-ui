@@ -39,7 +39,7 @@ import TorrentDeleteButton from './TorrentDeleteButton'
                     </div>
                     <div className='torrent-box-bottom'>               
                         <TorrentSpeed speed={this.props.rateDownload}/>
-                        <TorrentSize downloadedSize={this.props.sizeWhenDone*this.props.percentDone} totalSize={this.props.sizeWhenDone}/>
+                        <TorrentSize downloadedSize={this.props.sizeWhenDone*this.props.percentDone/100} totalSize={this.props.sizeWhenDone}/>
                     </div>
                 </div>
             </div>

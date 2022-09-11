@@ -1,6 +1,7 @@
 import React from 'react'
 import UIHeader from './header/UIHeader'
 import AllTorrentsBox from './torrent/AllTorrentsBox';
+import axios from 'axios'
 
 // testing request responses
 const torrents = [
@@ -47,7 +48,6 @@ const torrents = [
 ];
 
 
-
 /**
  * AppBox: main component to hold all others
  */
@@ -59,13 +59,14 @@ class AppBox extends React.Component {
         this.changeServerAddress = this.changeServerAddress.bind(this);
         this.changeDefaultDownloadLocation = this.changeDefaultDownloadLocation.bind(this);
         this.toggleTorrent = this.toggleTorrent.bind(this);
+        this.getTorrents = this.getTorrents.bind(this);
         this.state = {
             filterKey: 'all',
             sortKey: 'date',
             sortIsAscending: true,
             allTorrents: torrents,
             torrentsToShow: torrents,
-            serverAddress: '127.0.0.1:8080',
+            serverAddress: 'http://127.0.0.1:5000/',
             defaultDownloadLocation: '/opt/transmission/download'
         };
     }
@@ -85,7 +86,7 @@ class AppBox extends React.Component {
                 break;
             case 'finished':
                 newTorrentsToShow = state.allTorrents.filter( t => 
-                    t.isFinished === true
+                    t.status === 6
                 );
                 break;
             default:
@@ -141,6 +142,13 @@ class AppBox extends React.Component {
         this.setState(this.sortTorrents);
     }
 
+    checkServer() {
+        axios.get('/status')
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response);
+        })
+    }
+
     changeServerAddress(address) {
         this.setState({serverAddress: address});
     }
@@ -150,24 +158,77 @@ class AppBox extends React.Component {
     }
 
     toggleTorrent(torrentId) {
-        for(let i = 0; i < this.state.allTorrents.length; i++) {
-            if (this.state.allTorrents[i].id == torrentId) {
-                // offline simulation
-                let allTorrents = torrents;
-                let torrent = allTorrents[i];
-                switch (torrent.status) {
-                    case 0:
-                        torrent.status = 5;
-                        break;
-                    default:
-                        torrent.status = 0;
-                }
-                allTorrents[i] = torrent;
-                this.setState({allTorrents: allTorrents});
-                this.setState(this.filterTorrents);
+        let torrent = [];
+        let torrent_idx = 0
+        for (torrent_idx = 0; torrent_idx < this.state.allTorrents.length; torrent_idx++) {
+            torrent = this.state.allTorrents[torrent_idx];
+            if (torrent.id == torrentId) {
                 break;
             }
         }
+        let toggle_function = ''
+        if (torrent.status == 0) toggle_function = "start"
+        else toggle_function = "stop"
+
+        axios.get('/torrents/'.concat(torrentId.toString()).concat('/').concat(toggle_function))
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                let updated_torrent = response.data.data;
+                this.setState(function(state, props) {
+                    let allTorrents = state.allTorrents;
+                    allTorrents[torrent_idx] = updated_torrent;
+                    return {
+                        allTorrents: allTorrents
+                    };
+                });
+            }
+        })
+    }
+
+    onApiError(resp) {
+        console.log("api error. ".concat(resp.status));
+    }
+
+    onRequestError(error) {
+        console.log("request failed");
+    }
+
+    /*getTorrent(id) {
+        axios.get('/torrents/'.concat(id.toString()))
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                return response.data.data;
+            }
+        }).catch((error) => {
+            this.onRequestError(error);
+        });
+    }*/
+
+    getTorrents() {
+        axios.get('/torrents'
+        ).then((response => {
+            if (response.data["status"] != "success") {
+                console.log("api error: ".concat(response.data["status"]));
+                this.onApiError(response.data);
+            }
+            let torrents = response.data.data
+            this.setState({allTorrents: torrents});
+            this.setState(this.filterTorrents);
+            this.setState(this.sortTorrents);
+        })).catch((error) => {
+                this.onRequestError(error);
+            }
+        );
+    }
+
+    componentDidMount() {
+        axios.defaults.baseURL = this.state.serverAddress;
+        axios.defaults.headers.common["access-control-allow-origin"] = this.state.serverAddress;
+        
+        setInterval(this.getTorrents, 1000);
+        this.getTorrents();
     }
 
     render() {
