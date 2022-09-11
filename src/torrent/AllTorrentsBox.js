@@ -9,10 +9,15 @@ import TorrentBox from './TorrentBox';
     constructor(props) {
         super(props);
         this.toggleTorrent = this.toggleTorrent.bind(this);
+        this.deleteTorrent = this.deleteTorrent.bind(this);
     }
 
     toggleTorrent(torrentId) {
         this.props.toggleTorrent(torrentId);
+    }
+
+    deleteTorrent(torrentId) {
+        this.props.deleteTorrent(torrentId);
     }
 
     render() {
@@ -29,6 +34,7 @@ import TorrentBox from './TorrentBox';
                 sizeWhenDone={torrent.sizeWhenDone}
                 status={torrent.status}
                 toggleTorrent={this.toggleTorrent}
+                deleteTorrent={this.deleteTorrent}
             />
         )
         return (

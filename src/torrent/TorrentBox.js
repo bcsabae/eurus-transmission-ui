@@ -14,10 +14,15 @@ import TorrentDeleteButton from './TorrentDeleteButton'
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     toggle() {
         this.props.toggleTorrent(this.props.id);
+    }
+
+    delete() {
+        this.props.deleteTorrent(this.props.id);
     }
 
     render() {
@@ -31,7 +36,7 @@ import TorrentDeleteButton from './TorrentDeleteButton'
                         <TorrentName name={this.props.name}/>
                         <div className='torrent-box-top-right'>
                             <TorrentLocation location={this.props.downloadDir}/>
-                            <TorrentDeleteButton torrentId={this.props.id}/>
+                            <TorrentDeleteButton torrentId={this.props.id} onDelete={this.delete}/>
                         </div>
                     </div>
                     <div className='torrent-box-middle'>

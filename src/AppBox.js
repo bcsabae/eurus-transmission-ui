@@ -61,6 +61,7 @@ class AppBox extends React.Component {
         this.changeServerAddress = this.changeServerAddress.bind(this);
         this.changeDefaultDownloadLocation = this.changeDefaultDownloadLocation.bind(this);
         this.toggleTorrent = this.toggleTorrent.bind(this);
+        this.deleteTorrent = this.deleteTorrent.bind(this);
         this.getTorrents = this.getTorrents.bind(this);
         this.refresh = this.refresh.bind(this);
         this.periodicUpdate = this.periodicUpdate.bind(this);
@@ -217,6 +218,34 @@ class AppBox extends React.Component {
                 });
             }
         })
+        .catch((error) => {
+            this.onRequestError(error);
+        });
+    }
+
+    deleteTorrent(torrentId) {
+        axios.get('/torrents/'.concat(torrentId.toString()).concat('/').concat('delete'))
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                this.onApiSuccess(response);
+                let torrent = this.state.allTorrents.find((torrent) => {
+                    return (torrent.id === torrentId);
+                });
+                let torrent_idx = this.state.allTorrents.indexOf(torrent);
+                if (torrent_idx >= 0) {
+                    this.setState((state, props) => {
+                        let oldTorrents = state.allTorrents;
+                        return {
+                            allTorrents: oldTorrents.splice(torrent_idx, 1)
+                        }
+                    })
+                }
+            }
+        })
+        .catch((error) => {
+            this.onRequestError(error);
+        });
     }
 
     onApiError(resp) {
@@ -284,12 +313,13 @@ class AppBox extends React.Component {
                           />
                 <AllTorrentsBox torrentsToShow={this.state.torrentsToShow}
                                 toggleTorrent={this.toggleTorrent}
+                                deleteTorrent={this.deleteTorrent}
                                 defaultDownloadLocation={this.state.defaultDownloadLocation}
                                 />
                 <WarningBox message={this.state.errorMessage} />
                 <StatusBox connected={this.state.connected}
-                        onRefresh={this.refresh} 
-                        />
+                           onRefresh={this.refresh} 
+                           />
             </div>
         )
     }
