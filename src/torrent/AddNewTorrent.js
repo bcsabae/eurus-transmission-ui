@@ -7,14 +7,10 @@ import axios from 'axios'
  class AddNewTorrent extends React.Component {
     constructor(props) {
         super(props);
-        this.handleFileChange = this.handleFileChange.bind(this);
         this.handlePathChange = this.handlePathChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fileInputRef = React.createRef();
-        this.state = {
-            downloadPath : this.props.defaultDownloadLocation,
-            torrentFile: null
-        }
+        this.downloadPath = this.props.defaultDownloadLocation
     }
 
     closeNewTorrentModal() {
@@ -26,18 +22,13 @@ import axios from 'axios'
     }
 
     handlePathChange(event) {
-        this.setState({
-            downloadPath: event.target.value
-        });
-    }
-
-    handleFileChange(event) {
-        console.log("file selected: ".concat(event.target))
+        console.log('path was changed to '.concat(event.target.value))
+        this.downloadPath = event.target.value;
     }
 
     handleSubmit(event) {
         let dataToSend = {
-            path: this.state.downloadPath,
+            path: this.downloadPath,
             file: this.fileInputRef.current.files[0]
         };
         event.preventDefault();
@@ -63,6 +54,10 @@ import axios from 'axios'
         this.closeNewTorrentModal();
     }
 
+    componentDidUpdate(prevState, prevProps) {
+        document.getElementById('add-new-torrent-location-input').value = this.props.defaultDownloadLocation;
+    }
+
     render() {
         return (
             <div>
@@ -80,13 +75,13 @@ import axios from 'axios'
                         <form className='form' onSubmit={this.handleSubmit}>
                             <div className='form-row'>
                                 <label className='form-label'>Download location:</label>
-                                <input className='form-input' type='text' name='download-location' 
-                                       value={this.state.downloadPath} 
+                                <input className='form-input' type='text' name='download-location' id='add-new-torrent-location-input'
+                                       defaultValue={this.props.defaultDownloadLocation}
                                        onChange={this.handlePathChange}/>
                             </div>
                             <div className='form-row'>
                                 <label className='form-label'>Torrent file:</label>
-                                <input type='file' name='new-torrent-file' onChange={this.handleFileChange} ref={this.fileInputRef}/>
+                                <input type='file' name='new-torrent-file' ref={this.fileInputRef}/>
                             </div>
                             <div className='form-row'>
                                 <div className='align-right'>
@@ -96,8 +91,7 @@ import axios from 'axios'
                         </form>
                     </div>
                 </div>
-            </div>
-            
+            </div>      
         )
     }
 }

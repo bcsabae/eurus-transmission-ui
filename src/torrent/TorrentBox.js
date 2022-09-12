@@ -26,6 +26,18 @@ import TorrentDeleteButton from './TorrentDeleteButton'
     }
 
     render() {
+        let nameToShow;
+
+        switch (this.props.status) {
+            case 1:
+            case 2:
+                nameToShow = this.props.name.concat(" - verifying local data");
+                break;
+            default:
+                nameToShow = this.props.name
+                break;
+        }
+
         return (
             <div className='torrent-box'>
                 <div className='torrent-box-left'>
@@ -33,7 +45,7 @@ import TorrentDeleteButton from './TorrentDeleteButton'
                 </div>
                 <div className='torrent-box-right'>
                     <div className='torrent-box-top'>
-                        <TorrentName name={this.props.name}/>
+                        <TorrentName name={nameToShow}/>
                         <div className='torrent-box-top-right'>
                             <TorrentLocation location={this.props.downloadDir}/>
                             <TorrentDeleteButton torrentId={this.props.id} onDelete={this.delete}/>

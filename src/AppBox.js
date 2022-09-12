@@ -69,6 +69,9 @@ class AppBox extends React.Component {
         this.onApiSuccess = this.onApiSuccess.bind(this);
         this.onApiError = this.onApiError.bind(this);
         this.onRequestError = this.onRequestError.bind(this);
+        this.fetchConfig = this.fetchConfig.bind(this);
+        this.setConfigServerAddress = this.setConfigServerAddress.bind(this);
+        this.setConfigDefaultDownloadDir = this.setConfigDefaultDownloadDir.bind(this);
         this.state = {
             filterKey: 'all',
             sortKey: 'date',
@@ -80,6 +83,9 @@ class AppBox extends React.Component {
             errorMessage: "",
             connected: true
         };
+
+        this.serverAddressUpdateTimer = null;
+        this.defaultDownloadDirUpdateTimer = null;
     }
 
     filterTorrents(state, props) {
@@ -153,6 +159,23 @@ class AppBox extends React.Component {
         this.setState(this.sortTorrents);
     }
 
+    fetchConfig() {
+        axios.get('/config')
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                this.onApiSuccess(response);
+                this.setState({
+                    serverAddress: response.data.data.server_address,
+                    defaultDownloadLocation: response.data.data.default_download_dir
+                });
+            }
+        })
+        .catch((error) => {
+            this.onRequestError(error);
+        });
+    }
+
     refresh() {
         if (this.state.connected) {
             this.getTorrents();
@@ -166,7 +189,6 @@ class AppBox extends React.Component {
     }
 
     periodicHealthCheck() {
-        console.log('periodic health check: '.concat(this.state.connected.toString()))
         if (this.state.connected) {
             return;
         }
@@ -184,12 +206,63 @@ class AppBox extends React.Component {
         })
     }
 
+    setConfigServerAddress() {
+        clearTimeout(this.serverAddressUpdateTimer);
+        this.serverAddressUpdateTimer = null;
+
+        let postData = {
+            server_address : this.state.serverAddress
+        }
+
+        axios.post('/config', postData)
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                this.onApiSuccess(response);
+                this.setState({serverAddress: response.data.data.server_address});
+            }
+        })
+        .catch((error) => {
+            this.onRequestError(error);
+        });
+    }
+
+    setConfigDefaultDownloadDir() {
+        clearTimeout(this.serverAddressUpdateTimer);
+        this.serverAddressUpdateTimer = null;
+
+        let postData = {
+            default_download_dir : this.state.defaultDownloadLocation
+        }
+
+        axios.post('/config', postData)
+        .then((response) => {
+            if (response.data.status != "success") this.onApiError(response.data);
+            else {
+                this.onApiSuccess(response);
+                this.setState({defaultDownloadLocation: response.data.data.default_download_dir});
+            }
+        })
+        .catch((error) => {
+            this.onRequestError(error);
+        });
+    }
+
     changeServerAddress(address) {
         this.setState({serverAddress: address});
+        if (this.serverAddressUpdateTimer != null) {
+            clearTimeout(this.serverAddressUpdateTimer);
+        }
+        this.serverAddressUpdateTimer = setTimeout(this.setConfigServerAddress, 1000);
     }
+
 
     changeDefaultDownloadLocation(location) {
         this.setState({defaultDownloadLocation: location});
+        if (this.defaultDownloadDirUpdateTimer != null) {
+            clearTimeout(this.defaultDownloadDirUpdateTimer);
+        }
+        this.defaultDownloadDirUpdateTimer = setTimeout(this.setConfigDefaultDownloadDir, 1000);
     }
 
     toggleTorrent(torrentId) {
@@ -296,9 +369,11 @@ class AppBox extends React.Component {
         axios.defaults.baseURL = this.state.serverAddress;
         axios.defaults.headers.common["access-control-allow-origin"] = this.state.serverAddress;
         
-        setInterval(this.periodicUpdate, 1000);
-        setInterval(this.periodicHealthCheck, 5000);
+        setInterval(this.periodicUpdate, 100000);
+        setInterval(this.periodicHealthCheck, 500000);
         this.refresh();
+
+        setTimeout(this.fetchConfig, 1000);
     }
 
     render() {
