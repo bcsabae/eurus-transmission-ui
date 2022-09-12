@@ -39,7 +39,10 @@ import TorrentBox from './TorrentBox';
         )
         return (
             <div className='all-torrents-box'>
-                <AddNewTorrent defaultDownloadLocation={this.props.defaultDownloadLocation}/>
+                <AddNewTorrent defaultDownloadLocation={this.props.defaultDownloadLocation}
+                               onApiSuccess={this.props.onApiSuccess}
+                               onApiError={this.props.onApiError}
+                               onRequestError={this.props.onRequestError} />
                 {listTorrentBoxes}
             </div>
         )

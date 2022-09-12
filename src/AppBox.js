@@ -67,6 +67,8 @@ class AppBox extends React.Component {
         this.periodicUpdate = this.periodicUpdate.bind(this);
         this.periodicHealthCheck = this.periodicHealthCheck.bind(this);
         this.onApiSuccess = this.onApiSuccess.bind(this);
+        this.onApiError = this.onApiError.bind(this);
+        this.onRequestError = this.onRequestError.bind(this);
         this.state = {
             filterKey: 'all',
             sortKey: 'date',
@@ -249,7 +251,7 @@ class AppBox extends React.Component {
     }
 
     onApiError(resp) {
-        console.log("api error. ".concat(resp.status));
+        console.log("api error. ".concat(resp.data.status));
         let detailed = "";
 
         switch (resp.status) {
@@ -257,7 +259,7 @@ class AppBox extends React.Component {
                 detailed = "API cannot connect to torrent server"
                 break;
             default:
-                detailed = "ERROR: ".concat(resp.status);
+                detailed = "ERROR: ".concat(resp.data.status);
         }
 
         this.setState({errorMessage: detailed})
@@ -269,7 +271,7 @@ class AppBox extends React.Component {
 
     onRequestError(error) {
         console.log("request failed");
-        this.setState({connected: false})
+        this.setState({connected: false});
     }
 
     getTorrents() {
@@ -315,6 +317,9 @@ class AppBox extends React.Component {
                                 toggleTorrent={this.toggleTorrent}
                                 deleteTorrent={this.deleteTorrent}
                                 defaultDownloadLocation={this.state.defaultDownloadLocation}
+                                onApiSuccess={this.onApiSuccess}
+                                onApiError={this.onApiError}
+                                onRequestError={this.onRequestError}
                                 />
                 <WarningBox message={this.state.errorMessage} />
                 <StatusBox connected={this.state.connected}
