@@ -1,8 +1,8 @@
 import React from 'react'
 
 /**
- * TorrentProgressBar: progress bar for a downloading torrent
- * props: progress (float)
+ * TorrentProgressBar: progress bar for downloading or verifying a torrent
+ * props: progress (float): current progress
  */
  class TorrentProgressBar extends React.Component {
     render() {

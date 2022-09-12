@@ -3,8 +3,8 @@ import SortByPropertyButton from './SortByPropertyButton'
 
 /**
  * SortByPropertyBox: box to hold buttons for sorting torrents
- * props: sortKey (string)
- *        changeKey (function)
+ * props: sortKey (string): current active sorting key
+ *        changeKey (function): function to call on selection of a filter
  */
 class SortByPropertyBox extends React.Component {
     constructor(props) {

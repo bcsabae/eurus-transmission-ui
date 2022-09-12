@@ -2,10 +2,10 @@ import React from 'react'
 
 /**
  * SortByPropertyButton: button to sort torrents by name
- * props: text (string)
- *        value (string)
- *        isActive (boolean)
- *        onClick (function)
+ * props: text (string): text to display
+ *        value (string): filtering key
+ *        isActive (boolean): whether the filter is active or not
+ *        onClick (function): function to call on toggle
  */
  class SortByPropertyButton extends React.Component {
     constructor(props) {

@@ -2,10 +2,10 @@ import React from 'react'
 
 /**
  * FilterByStatusButton: button to show filter
- * props: text (string)
- *        value (string)
- *        isActive (boolean)
- *        onClick (function)
+ * props: text (string): text to display
+ *        value (string): filtering key
+ *        isActive (boolean): whether the filter is active or not
+ *        onClick (function): function to call on toggle
  */
  class FilterByStatusButton extends React.Component {
     constructor(props) {

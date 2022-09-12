@@ -1,7 +1,12 @@
 import React from "react";
 
 /**
- * Settings: settings window
+ * Settings: settings window - this can set server address and default download directory. The settings are states that are passed up and
+ * handled by the root component.
+ * props: changeServerAddress (function): function to call when changing server address
+ *        changeDefaultDownloadLocation (function): function to call on changing download location
+ *        serverAddress (string): current server address
+ *        defaultDownloadLocation (string): current default download directory
  */
 class Settings extends React.Component {
     constructor(props) {

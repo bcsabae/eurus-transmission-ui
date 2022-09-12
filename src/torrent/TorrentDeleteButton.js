@@ -2,7 +2,7 @@ import React from 'react'
 
 /**
  * TorrentDeleteButton: button to delete torrent
- * props: torrentId
+ * props: onDelete (function): function to call when button is clicked 
  */
  class TorrentDeleteButton extends React.Component {
     constructor(props) {

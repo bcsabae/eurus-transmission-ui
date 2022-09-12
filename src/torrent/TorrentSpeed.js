@@ -2,7 +2,7 @@ import React from 'react'
 
 /**
  * TorrentSpeed: downloading speed of a torrent
- * props: speed (int) [Bytes/sec]
+ * props: speed (int): downloading speed in bytes/second
  */
  class TorrentSpeed extends React.Component {
     render() {

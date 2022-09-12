@@ -9,6 +9,15 @@ import TorrentDeleteButton from './TorrentDeleteButton'
 
 /**
  * TorrentBox: containing box of a torrent
+ * props: toggleTorrent (function): function to call when a torrent is resumed/paused
+ *        deleteTorrent (function): function to call when a torrent is deleted
+ *        status (int): status of the torrent (see RPC specification)
+ *        name (string): name of the torrent
+ *        downloadDir (string): path where the torrent is downloading
+ *        id (int): ID of the torrent on the remote server
+ *        percentDone (float): how much of the data is downloaded (0..1)
+ *        rateDownload (int): downloading rate in bytes/second
+ *        sizeWhenDone (int): total size in bytes
  */
  class TorrentBox extends React.Component {
     constructor(props) {
@@ -28,6 +37,7 @@ import TorrentDeleteButton from './TorrentDeleteButton'
     render() {
         let nameToShow;
 
+        // see RPC spec.
         switch (this.props.status) {
             case 1:
             case 2:

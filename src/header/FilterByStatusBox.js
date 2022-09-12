@@ -3,8 +3,8 @@ import FilterByStatusButton from './FilterByStatusButton'
 
 /**
  * FilterByStatusBox: box containing filters to show all, downloading or finished torrents
- * props: filterKey (string)
- *        changeKey (function)
+ * props: filterKey (string): current active filtering key
+ *        handleSelectFilter (function): function to call on selection of a filter
  */
  class FilterByStatusBox extends React.Component {
     constructor(props) {

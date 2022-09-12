@@ -3,7 +3,14 @@ import AddNewTorrent from './AddNewTorrent'
 import TorrentBox from './TorrentBox';
 
 /**
- * AllTorrentsBox: box containing all torrents
+ * AllTorrentsBox: box containing all torrents and add new torrent form (via a button)
+ * props: toggleTorrent (function): function to call when a torrent is resumed/paused
+ *        deleteTorrent (function): function to call when a torrent is deleted
+ *        torrentsToShow (array): array containing torrents that match current filters and need to be rendered
+ *        defaultDownloadLocation (string): default download location
+ *        onApiSuccess (function): function to call on a successful API call
+ *        onApiError (function): function to call on a failed API call
+ *        onRequestError (function): function to call on a failed request to the API server
  */
  class AllTorrentsBox extends React.Component {
     constructor(props) {

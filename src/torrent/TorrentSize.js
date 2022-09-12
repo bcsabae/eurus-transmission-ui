@@ -2,8 +2,8 @@ import React from 'react'
 
 /**
  * TorrentSize: text displaying downloaded and total size of a torrent
- * props: downloadedSize (int) [Bytes]
- *        totalSize (int) [Bytes]
+ * props: downloadedSize (int): downloaded size in bytes
+ *        totalSize (int): total size in bytes
  */
  class TorrentSize extends React.Component {
     render() {

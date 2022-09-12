@@ -1,5 +1,10 @@
 import React from "react";
 
+/**
+ * StatusBox: box to show status and refresh button
+ * props: onRefresh (function): function to call when refresh button is pressed
+ *        connected (bool): if the connection to the API server is active 
+ */
 class StatusBox extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +22,6 @@ class StatusBox extends React.Component {
                     <div className={this.props.connected ? "status-box-online" : "status-box-offline"}>
                         {this.props.connected ? "connected" : "disconnected"}
                     </div>
-
                 </div>
                 <div className="status-box-refresh" onClick={this.refresh}>
                     <i class="bi bi-arrow-clockwise"></i>

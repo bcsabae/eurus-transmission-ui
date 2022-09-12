@@ -2,9 +2,8 @@ import React from 'react'
 
 /**
  * TorrentPlayPauseButton: button to play or pause torrent
- * props: torrentStatus (int)
- *        inProgress (boolean)
- *        toggle (function)
+ * props: torrentStatus (int): current status of the torrent (see RPC specification)
+ *        toggle (function): function to call when clicked
  */
  class TorrentPlayPauseButton extends React.Component {
     constructor(props) {
@@ -19,6 +18,8 @@ import React from 'react'
     render() {
         let torrentStatus = this.props.torrentStatus;
         let inProgress = false
+        
+        // see RPC specification
         if (torrentStatus === 0) {
             // 0: stopped, 
             inProgress = false;

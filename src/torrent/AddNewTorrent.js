@@ -2,7 +2,13 @@ import React from 'react'
 import axios from 'axios'
 
 /**
- * AddNewTorrent: button and modal to add a new torrent (i.e. TorrentBox)
+ * AddNewTorrent: button and modal to add a new torrent (i.e. TorrentBox). A form is rendered, which has uncontrolled fields.
+ * API calls for adding a new torrent are handled here.
+ * props: defaultDownloadLocation (string): default download location. This is inherited from the app's settings and is updated
+ *                                          only here, changes will not affect the global default setting.
+ *        onApiSuccess (function): function to call on a successful API call
+ *        onApiError (function): function to call on a failed API call
+ *        onRequestError (function): function to call on a failed request to the API server
  */
  class AddNewTorrent extends React.Component {
     constructor(props) {
@@ -22,7 +28,6 @@ import axios from 'axios'
     }
 
     handlePathChange(event) {
-        console.log('path was changed to '.concat(event.target.value))
         this.downloadPath = event.target.value;
     }
 

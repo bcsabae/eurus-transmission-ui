@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * WarningBox: popup box to show warnings and errors
+ * props: message (string): message to display
+ */
 class WarningBox extends React.Component {
     close() {
         let div = document.getElementById("warningBox");

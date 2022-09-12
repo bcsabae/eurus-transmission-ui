@@ -4,11 +4,15 @@ import SortByPropertyBox from './SortByPropertyBox'
 import Settings from './Settings';
 
 /**
- * UI Header: Header holding interactive UI elements for sorting and filtering
- * props: sortKey (string)
- *        filterKey (string)
- *        changeSortKey (function)
- *        changeFilterKey (function)
+ * UI Header: header holding interactive UI elements for sorting and filtering, as well as the settings window
+ * props: sortKey (string): active key for sorting
+ *        filterKey (string): active key for filtering
+ *        changeSortKey (function): function to call on a changed sort key
+ *        changeFilterKey (function): function to call on a changed filter key
+ *        changeServerAddress (function): function to call on a changed server address
+ *        changeDefaultDownloadLocation (function): function to call on a changed default download location
+ *        serverAddress (string): current server address
+ *        defaultDownloadLocation (string): current default download location
  */
  class UIHeader extends React.Component {
     constructor(props) {
