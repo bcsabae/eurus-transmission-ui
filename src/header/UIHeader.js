@@ -49,7 +49,7 @@ import Settings from './Settings';
                     <SortByPropertyBox sortKey={this.props.sortKey} changeKey={this.changeSortKey}/>
                     <Settings changeServerAddress={this.changeServerAddress} 
                               serverAddress={this.props.serverAddress}
-                              changeDefaultDownloadLocation={this.props.changeDefaultDownloadLocation}
+                              changeDefaultDownloadLocation={this.changeDefaultDownloadLocation}
                               defaultDownloadLocation={this.props.defaultDownloadLocation} />
                 </div>
             </div> 
