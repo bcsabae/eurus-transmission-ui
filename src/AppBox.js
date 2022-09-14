@@ -244,6 +244,7 @@ class AppBox extends React.Component {
         ).then((response => {
             if (response.data["status"] !== "success") {
                 this.onApiError(response.data);
+                return;
             }
             this.onApiSuccess(response);
             let torrents = response.data.data
@@ -380,6 +381,9 @@ class AppBox extends React.Component {
         switch (resp.status) {
             case "not connected":
                 detailed = "API cannot connect to torrent server"
+                break;
+            case "not authenticated":
+                detailed = "Authentication error"
                 break;
             default:
                 detailed = "ERROR: ".concat(resp.data.status);
