@@ -6,6 +6,10 @@ import StatusBox from './StatusBox';
 import axios from 'axios'
 
 
+// change this if you need to for your setup
+const SERVER_ADDRESS = 'http://127.0.0.1:3001';
+const DEFAULT_DOWNLOAD_DIR = '/opt/transmission/download';
+
 /**
  * AppBox: main component to hold all others
  * callbacks:
@@ -87,8 +91,8 @@ class AppBox extends React.Component {
             sortIsAscending: true,
             allTorrents: [],
             torrentsToShow: [],
-            serverAddress: 'http://127.0.0.1:3001/',
-            defaultDownloadLocation: '/opt/transmission/download',
+            serverAddress: SERVER_ADDRESS,
+            defaultDownloadLocation: DEFAULT_DOWNLOAD_DIR,
             connected: true,
             errorMessage: ""
         };
